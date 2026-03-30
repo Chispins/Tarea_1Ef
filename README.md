@@ -19,14 +19,6 @@ Los siguientes archivos deben estar en la carpeta del proyecto:
 pip install -r requirements.txt
 ```
 
-## Como correr el proyecto
-
-Desde la raiz del proyecto, ejecuta:
-
-```powershell
-python Pregunta_2.py
-```
-
 ## Problemas comunes
 
 - `ModuleNotFoundError`: vuelve a instalar dependencias con `pip install -r requirements.txt`.
