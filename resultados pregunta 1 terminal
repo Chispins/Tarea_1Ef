@@ -1,117 +1,116 @@
-Warning in Sys.setlocale("LC_CTYPE", "en_US.UTF-8") :
-  using locale code page other than 1252 may cause problems
 [1] "en_US.UTF-8"
 [1] "AAPL" "MSFT" "AMZN" "GSPC" "IRX" 
- Estad�stica descriptiva de los excesos de retorno 
+ Estadística descriptiva de los excesos de retorno 
                  AAPL_ex  MSFT_ex  AMZN_ex Mercado_ex
-Observations    522.0000 522.0000 522.0000   522.0000
+Observations    523.0000 523.0000 523.0000   523.0000
 NAs               0.0000   0.0000   0.0000     0.0000
 Minimum          -0.1927  -0.1453  -0.1498    -0.1623
-Quartile 1       -0.0173  -0.0156  -0.0186    -0.0097
-Median            0.0055   0.0044   0.0031     0.0029
-Arithmetic Mean   0.0040   0.0034   0.0032     0.0017
-Geometric Mean    0.0032   0.0029   0.0024     0.0014
-Quartile 3        0.0260   0.0215   0.0273     0.0144
+Quartile 1       -0.0173  -0.0155  -0.0185    -0.0097
+Median            0.0055   0.0043   0.0029     0.0029
+Arithmetic Mean   0.0040   0.0034   0.0033     0.0018
+Geometric Mean    0.0033   0.0029   0.0024     0.0015
+Quartile 3        0.0259   0.0215   0.0277     0.0145
 Maximum           0.1374   0.1161   0.1507     0.1142
 SE Mean           0.0017   0.0014   0.0018     0.0010
-LCL Mean (0.95)   0.0007   0.0006  -0.0003    -0.0003
-UCL Mean (0.95)   0.0073   0.0061   0.0068     0.0038
+LCL Mean (0.95)   0.0007   0.0007  -0.0003    -0.0003
+UCL Mean (0.95)   0.0073   0.0062   0.0068     0.0038
 Variance          0.0015   0.0010   0.0017     0.0006
 Stdev             0.0384   0.0320   0.0412     0.0237
-Skewness         -0.4094  -0.0909  -0.2298    -0.8975
-Kurtosis          2.4539   1.4649   1.4912     7.5694
+Skewness         -0.4131  -0.0935  -0.2321    -0.9010
+Kurtosis          2.4653   1.4580   1.4867     7.5653
 null device 
           1 
 
- Resultados regresi�n AAPL 
+ Resultados regresión AAPL 
 
 Call:
 lm(formula = AAPL_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.107923 -0.014297 -0.001734  0.013705  0.125117 
+-0.107926 -0.014312 -0.001727  0.013603  0.125123 
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.002061   0.001233   1.672   0.0951 .  
-Mercado_ex  1.109197   0.051958  21.348   <2e-16 ***
+(Intercept) 0.002053   0.001231   1.668   0.0959 .  
+Mercado_ex  1.108343   0.051870  21.368   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02809 on 520 degrees of freedom
-Multiple R-squared:  0.4671,	Adjusted R-squared:  0.466 
-F-statistic: 455.7 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.02806 on 521 degrees of freedom
+Multiple R-squared:  0.467,	Adjusted R-squared:  0.466 
+F-statistic: 456.6 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresi�n MSFT 
+ Resultados regresión MSFT 
 
 Call:
 lm(formula = MSFT_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.084658 -0.011464 -0.000081  0.012217  0.101332 
+-0.084660 -0.011481 -0.000103  0.012237  0.101319 
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.001708   0.000964   1.772    0.077 .  
-Mercado_ex  0.981380   0.040632  24.153   <2e-16 ***
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 0.0017080  0.0009624   1.775   0.0765 .  
+Mercado_ex  0.9824025  0.0405644  24.218   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02197 on 520 degrees of freedom
-Multiple R-squared:  0.5287,	Adjusted R-squared:  0.5278 
-F-statistic: 583.4 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.02195 on 521 degrees of freedom
+Multiple R-squared:  0.5296,	Adjusted R-squared:  0.5287 
+F-statistic: 586.5 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresi�n AMZN 
+ Resultados regresión AMZN 
 
 Call:
 lm(formula = AMZN_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.185286 -0.015036 -0.000224  0.015264  0.203073 
+-0.185348 -0.015046 -0.000246  0.015380  0.203311 
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.001415   0.001440   0.982    0.327    
-Mercado_ex  1.052735   0.060715  17.339   <2e-16 ***
+(Intercept) 0.001420   0.001438   0.987    0.324    
+Mercado_ex  1.054232   0.060617  17.392   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.03282 on 520 degrees of freedom
-Multiple R-squared:  0.3663,	Adjusted R-squared:  0.3651 
-F-statistic: 300.6 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.0328 on 521 degrees of freedom
+Multiple R-squared:  0.3673,	Adjusted R-squared:  0.3661 
+F-statistic: 302.5 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
  Resumen de coeficientes estimados 
-  Activo       Alpha     Beta
-1   AAPL 0.002061263 1.109197
-2   MSFT 0.001708180 0.981380
-3   AMZN 0.001414635 1.052735
+  Activo       Alpha      Beta
+1   AAPL 0.002052795 1.1083432
+2   MSFT 0.001707996 0.9824025
+3   AMZN 0.001419961 1.0542316
 
- Test de Hip�tesis para Apple (AAPL) 
+ Test de Hipótesis para Apple (AAPL) 
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.1092
-Estad�stico t: 21.3480
-P-valor:       4.387783e-73
-Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
-Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
+Beta estimado: 1.1083
+Estadístico t: 21.3676
+P-valor:       3.235275e-73
+Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
+Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
 
- Test de Hip�tesis para Microsoft (MSFT) 
+ Test de Hipótesis para Microsoft (MSFT) 
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 0.9814
-Estad�stico t: 24.1532
-P-valor:       5.419832e-87
-Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
-Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
+Beta estimado: 0.9824
+Estadístico t: 24.2183
+P-valor:       2.304256e-87
+Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
+Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
 
- Test de Hip�tesis para Amazon (AMZN) 
+ Test de Hipótesis para Amazon (AMZN) 
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.0527
-Estad�stico t: 17.3390
-P-valor:       1.743716e-53
-Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
-Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
+Beta estimado: 1.0542
+Estadístico t: 17.3918
+P-valor:       9.309762e-54
+Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
+Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+
