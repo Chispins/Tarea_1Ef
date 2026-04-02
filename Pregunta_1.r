@@ -1,5 +1,5 @@
-# Forza a R a usar codificación UTF-8 para que lea bien los caracteres
-Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+# Fuerza a R a usar una configuración regional en español para manejar correctamente los caracteres
+Sys.setlocale("LC_ALL", "en_US.UTF-8")
 
 # Se cargan las librerías
 # Ecosistema Financiero
@@ -140,7 +140,7 @@ grafico_alpha <- ggplot(resultados_anuales, aes(x = Year, y = Alpha, color = Act
   geom_hline(yintercept = 0, linetype = "dashed", color = "black") + # Referencia de Alpha = 0
   facet_wrap(~Activo, ncol = 1) +             # Separar un gráfico por cada empresa (verticalmente)
   theme_minimal() +                           # Estilo visual limpio y moderno
-  labs(title = "Evolución temporal del alpha por año)",
+  labs(title = "Evolución temporal del alpha por año",
        x = "Año", y = "Alpha estimado") +
   theme(legend.position = "none")             # Ocultar leyenda (el título de la faceta ya indica el activo)
 
@@ -202,3 +202,4 @@ test_hipotesis_beta <- function(modelo, nombre_activo) {
 test_hipotesis_beta(modelo_aapl, "Apple (AAPL)")
 test_hipotesis_beta(modelo_msft, "Microsoft (MSFT)")
 test_hipotesis_beta(modelo_amzn, "Amazon (AMZN)")
+

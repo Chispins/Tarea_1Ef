@@ -1,6 +1,69 @@
-[1] "en_US.UTF-8"
-[1] "AAPL" "MSFT" "AMZN" "GSPC" "IRX" 
- Estadística descriptiva de los excesos de retorno 
+Warning in Sys.setlocale("LC_ALL", "en_US.UTF-8") :
+  using locale code page other than 1252 may cause problems
+[1] "LC_COLLATE=en_US.UTF-8;LC_CTYPE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8"
+Cargando paquete requerido: xts
+Cargando paquete requerido: zoo
+
+Adjuntando el paquete: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Cargando paquete requerido: TTR
+Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo
+Warning: package ‘PerformanceAnalytics’ was built under R version 4.5.3
+
+Adjuntando el paquete: ‘PerformanceAnalytics’
+
+The following object is masked from ‘package:graphics’:
+
+    legend
+
+
+Adjuntando el paquete: ‘lubridate’
+
+The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union
+
+Warning: package ‘dplyr’ was built under R version 4.5.2
+
+######################### Warning from 'xts' package ##########################
+#                                                                             #
+# The dplyr lag() function breaks how base R's lag() function is supposed to  #
+# work, which breaks lag(my_xts). Calls to lag(my_xts) that you type or       #
+# source() into this session won't work correctly.                            #
+#                                                                             #
+# Use stats::lag() to make sure you're not using dplyr::lag(), or you can add #
+# conflictRules('dplyr', exclude = 'lag') to your .Rprofile to stop           #
+# dplyr from breaking base R's lag() function.                                #
+#                                                                             #
+# Code in packages is not affected. It's protected by R's namespace mechanism #
+# Set `options(xts.warn_dplyr_breaks_lag = FALSE)` to suppress this warning.  #
+#                                                                             #
+###############################################################################
+
+Adjuntando el paquete: ‘dplyr’
+
+The following objects are masked from ‘package:xts’:
+
+    first, last
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning: package ‘tidyr’ was built under R version 4.5.2
+Warning: package ‘ggplot2’ was built under R version 4.5.2
+[1] "AAPL" "MSFT" "AMZN" "GSPC" "IRX"
+ Estad�stica descriptiva de los excesos de retorno
                  AAPL_ex  MSFT_ex  AMZN_ex Mercado_ex
 Observations    523.0000 523.0000 523.0000   523.0000
 NAs               0.0000   0.0000   0.0000     0.0000
@@ -8,109 +71,109 @@ Minimum          -0.1927  -0.1453  -0.1498    -0.1623
 Quartile 1       -0.0173  -0.0155  -0.0185    -0.0097
 Median            0.0055   0.0043   0.0029     0.0029
 Arithmetic Mean   0.0040   0.0034   0.0033     0.0018
-Geometric Mean    0.0033   0.0029   0.0024     0.0015
-Quartile 3        0.0259   0.0215   0.0277     0.0145
+Geometric Mean    0.0033   0.0029   0.0025     0.0015
+Quartile 3        0.0261   0.0215   0.0277     0.0145
 Maximum           0.1374   0.1161   0.1507     0.1142
 SE Mean           0.0017   0.0014   0.0018     0.0010
-LCL Mean (0.95)   0.0007   0.0007  -0.0003    -0.0003
+LCL Mean (0.95)   0.0007   0.0007  -0.0002    -0.0003
 UCL Mean (0.95)   0.0073   0.0062   0.0068     0.0038
 Variance          0.0015   0.0010   0.0017     0.0006
 Stdev             0.0384   0.0320   0.0412     0.0237
-Skewness         -0.4131  -0.0935  -0.2321    -0.9010
-Kurtosis          2.4653   1.4580   1.4867     7.5653
-null device 
-          1 
+Skewness         -0.4137  -0.0935  -0.2313    -0.8989
+Kurtosis          2.4622   1.4597   1.4798     7.5438
+null device
+          1
 
- Resultados regresión AAPL 
+ Resultados regresi�n AAPL
 
 Call:
 lm(formula = AAPL_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max 
--0.107926 -0.014312 -0.001727  0.013603  0.125123 
+      Min        1Q    Median        3Q       Max
+-0.107928 -0.014323 -0.001724  0.013598  0.125123
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.002053   0.001231   1.668   0.0959 .  
-Mercado_ex  1.108343   0.051870  21.368   <2e-16 ***
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 0.002052   0.001231   1.667    0.096 .
+Mercado_ex  1.108040   0.051838  21.375   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02806 on 521 degrees of freedom
-Multiple R-squared:  0.467,	Adjusted R-squared:  0.466 
-F-statistic: 456.6 on 1 and 521 DF,  p-value: < 2.2e-16
+Residual standard error: 0.02807 on 521 degrees of freedom
+Multiple R-squared:  0.4672,	Adjusted R-squared:  0.4662
+F-statistic: 456.9 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresión MSFT 
+ Resultados regresi�n MSFT
 
 Call:
 lm(formula = MSFT_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max 
--0.084660 -0.011481 -0.000103  0.012237  0.101319 
+      Min        1Q    Median        3Q       Max
+-0.084642 -0.011441 -0.000095  0.012229  0.101344
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.0017080  0.0009624   1.775   0.0765 .  
-Mercado_ex  0.9824025  0.0405644  24.218   <2e-16 ***
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) 0.0016916  0.0009622   1.758   0.0793 .
+Mercado_ex  0.9817438  0.0405296  24.223   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02195 on 521 degrees of freedom
-Multiple R-squared:  0.5296,	Adjusted R-squared:  0.5287 
-F-statistic: 586.5 on 1 and 521 DF,  p-value: < 2.2e-16
+Residual standard error: 0.02194 on 521 degrees of freedom
+Multiple R-squared:  0.5297,	Adjusted R-squared:  0.5288
+F-statistic: 586.7 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresión AMZN 
+ Resultados regresi�n AMZN
 
 Call:
 lm(formula = AMZN_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max 
--0.185348 -0.015046 -0.000246  0.015380  0.203311 
+      Min        1Q    Median        3Q       Max
+-0.185382 -0.015060 -0.000275  0.015355  0.203426
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 0.001420   0.001438   0.987    0.324    
-Mercado_ex  1.054232   0.060617  17.392   <2e-16 ***
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 0.001425   0.001438   0.991    0.322
+Mercado_ex  1.054976   0.060585  17.413   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 Residual standard error: 0.0328 on 521 degrees of freedom
-Multiple R-squared:  0.3673,	Adjusted R-squared:  0.3661 
-F-statistic: 302.5 on 1 and 521 DF,  p-value: < 2.2e-16
+Multiple R-squared:  0.3679,	Adjusted R-squared:  0.3667
+F-statistic: 303.2 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resumen de coeficientes estimados 
+ Resumen de coeficientes estimados
   Activo       Alpha      Beta
-1   AAPL 0.002052795 1.1083432
-2   MSFT 0.001707996 0.9824025
-3   AMZN 0.001419961 1.0542316
+1   AAPL 0.002052011 1.1080400
+2   MSFT 0.001691617 0.9817438
+3   AMZN 0.001425234 1.0549764
 
- Test de Hipótesis para Apple (AAPL) 
+ Test de Hip�tesis para Apple (AAPL)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.1083
-Estadístico t: 21.3676
-P-valor:       3.235275e-73
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Beta estimado: 1.1080
+Estad�stico t: 21.3749
+P-valor:       2.977579e-73
+Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
+Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
 
- Test de Hipótesis para Microsoft (MSFT) 
+ Test de Hip�tesis para Microsoft (MSFT)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 0.9824
-Estadístico t: 24.2183
-P-valor:       2.304256e-87
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Beta estimado: 0.9817
+Estad�stico t: 24.2229
+P-valor:       2.187002e-87
+Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
+Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
 
- Test de Hipótesis para Amazon (AMZN) 
+ Test de Hip�tesis para Amazon (AMZN)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.0542
-Estadístico t: 17.3918
-P-valor:       9.309762e-54
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Beta estimado: 1.0550
+Estad�stico t: 17.4131
+P-valor:       7.355797e-54
+Conclusi�n: Se RECHAZA la hip�tesis nula (H0) al 5% de significancia.
+Interpretaci�n: El activo tiene una relaci�n estad�sticamente significativa con el mercado.
 

@@ -1,0 +1,52 @@
+1. Ajustes de paquetes y del entorno
+Sys.setlocale(): Cambia la configuración regional del sistema operativo en R. En el código, se aplica para que R identifique apropiadamente los caracteres especiales de la lengua española (como "ñ" o las tildes).
+library(): Se utilizan los paquetes o bibliotecas adicionales, que no están incluidos de manera predeterminada en R, para cargar en la sesión activa (por ejemplo, dplyr, quantmod y ggplot2).
+
+2. Gestión de fechas y vectores
+Sys.Date(): Consigue la fecha vigente en el sistema informático.
+years() (de la librería lubridate): Genera un objeto de duración de tiempo en años. Se emplea matemáticamente para sustraerle a la fecha presente (Sys.Date()) diez años completos.
+year() (proveniente del paquete lubridate): Extraiga solamente el año (en formato numérico) de una fecha completa.
+c(): Función básica en R para realizar concatenaciones. Agrupa los componentes individuales para formar un "vector" (por ejemplo, reúne los nombres de los tickers).
+
+3. Descarga y manejo de información financiera
+getSymbols() (del paquete quantmod): Enlaza R con fuentes externas de datos (por ejemplo, Yahoo Finance) para obtener series de tiempo en términos financieros. Los parámetros muestran los activos, la fuente, las fechas y la periodicidad (diaria, semanal, entre otros).
+Ad() (perteneciente al paquete quantmod): Extrae específicamente la columna "Precios de Cierre Ajustados" (Adjusted Close) de un objeto financiero, que ya tiene en cuenta los dividendos y las divisiones.
+merge(): Combina diversas series temporales en un único cuadro, alineando de manera automática los datos según su fecha precisa.
+colnames(): Establece o obtiene los nombres de las columnas en un conjunto de datos o matriz.
+na.omit(): Elimina las filas de un conjunto de datos que contengan valores NA (nulos o faltantes), lo cual garantiza que el análisis se realice con datos limpios.
+Return.calculate() (perteneciente al paquete PerformanceAnalytics): Realiza automáticamente el cálculo de las ganancias de una secuencia de precios. Calcula retornos compuestos de manera ininterrumpida (logarítmicos) si se emplea method = "log".
+sweep(): Realiza una operación matemática (en este caso, la resta con FUN = "-") entre un vector y una matriz/dataframe de datos. Se empleó para sustraer la tasa libre de riesgo a las ganancias de todos los activos simultáneamente.
+
+4. Conversión de datos (entorno Tidyverse)
+as.data.frame(): Cambia objetos de formatos distintos (por ejemplo, series de tiempo en forma de matriz como xts o zoo) a un marco de datos habitual (data frame) en R.
+index() (del paquete xts/zoo): Extrae el vector de fechas que actúa como un "índice" temporal para una serie temporal.
+coredata() (del paquete xts/zoo): Desasocie las fechas de una serie temporal y extraiga solo los valores numéricos.
+%>% (operador Pipe): El resultado de la función a su izquierda lo usa como primer argumento de la función que está a su derecha. Permite que el código fluya como una receta paso a paso.
+pivot_longer() (del paquete tidyr): Convierte un marco de datos de formato "ancho" (con muchas columnas) a uno de formato "largo" (con pocas columnas, pero con muchas filas). Agrupa los nombres de las columnas en una variable llamada Activo y sus datos en otra, denominada Exceso_Activo.
+group_by() (del paquete dplyr): Con el fin de que las operaciones subsiguientes se realicen de manera independiente para cada conjunto, agrupa internamente el grupo de datos por ciertas variables (como "Año" y "Activo").
+summarise() (del paquete dplyr): Genera una nueva tabla en la que los datos estén agrupados, de acuerdo con las categorías establecidas, y aplica cálculos resumen a cada grupo (en esta ocasión, determinando alpha y beta por año).
+
+5. Econometría y estadística
+• tabla. stats() (perteneciente al paquete PerformanceAnalytics): Produce un resumen estadístico exhaustivo diseñado para las finanzas. Incorpora la media, la varianza, la asimetría (skewness) y la curtosis de los rendimientos.
+lm(): Se usa para ajustar un modelo lineal. Es el procedimiento que emplea Mínimos Cuadrados Ordinarios (MCO) para calcular las regresiones del CAPM (Variable_Independiente ~ Variable_Dependiente).
+summary(): Cuando se utiliza en un modelo lineal (lm), produce un informe analítico que contiene el estadístico t, el p-valor, los coeficientes y el R cuadrado.
+coef(): Extrae de modo específico los coeficientes matemáticos que el modelo ha calculado. coef()[1] obtiene el intercepto (Alfa) y coef()[2] obtiene la pendiente (Beta).
+
+6. Generación y exportación de diagramas
+graphics.off(): Esta función permite limpiar y cerrar cualquier dispositivo gráfico que haya quedado abierto en la sesión para prevenir superposiciones visuales o errores de memoria.
+jpeg() / dev.off(): Inicia un "lienzo" oculto en el que R creará gráficos para exportarlos como archivos de imagen .jpg en tu equipo. El comando dev.off() notifica que el dibujo ha finalizado y almacena el archivo.
+par(mfrow = c(columnas, filas)): Cambia los parámetros gráficos fundamentales. Posibilita la división de la ventana gráfica en una cuadrícula para incluir múltiples gráficos al mismo tiempo.
+plot.zoo(): Una versión de la función plot que se ha optimizado para trazar series temporales, alineando adecuadamente las fechas en el eje X.
+ggplot() (del paquete ggplot2): Con el sistema de "gramática de gráficos", establece un gráfico sofisticado. Obtiene el conjunto de datos y las estéticas (aes()).
+aes(): Establece la estética del gráfico, o sea, qué variables se ubican en el eje Y y en el eje X, así como su coloración.
+geom_line() / geom_point() / geom_hline(): Son "capas" de ggplot. Incluyen, en su respectivo orden, líneas trazadas, puntos para cada observación y líneas de referencia horizontales.
+facet_wrap(): Separa un solo gráfico en varios "subgráficos" (paneles o facetas) con base en una variable de tipo categórico (como el nombre del activo).
+theme_minimal() / labs() / theme(): Estratos de diseño. Eliminan el fondo del gráfico, cambian las etiquetas y los títulos, y enmascaran las leyendas que no son necesarias.
+ggsave(): Función especializada que permite exportar gráficos creados por ggplot2 en archivos de imagen (jpg, png, pdf) con alta resolución.
+
+7. Programación y presentación de resultados
+cat(): Muestra texto plano en la terminal. El "salto de línea" (Enter) se expresa con el símbolo \n.
+print(): Permite imprimir objetos (por ejemplo, tablas de resultados o datos de modelos) en la consola R.
+function(): Estructura de código que establece una herramienta a medida, la cual toma parámetros de entrada (argumentos), ejecuta una rutina interna y emite un resultado.
+sprintf(): Con esta función se imprime texto en la consola, formateado e incluyendo variables. Por ejemplo, %.4f señala que un número debe ser redondeado a 4 decimales, mientras que %e lo presenta en notación científica.
+if() { ... } else { ... }: Estructura lógica de control. Analiza una condición (por ejemplo, si el valor p es inferior a 0.05). Si es verdadero, se ejecuta el bloque de código que está dentro de las primeras llaves; si no, se ejecuta el código que está en el bloque else.
