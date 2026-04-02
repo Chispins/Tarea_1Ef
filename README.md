@@ -30,7 +30,7 @@ Tambien imprime:
 - Estadística descriptiva
 - Resultados de regresiones CAPM
 - Test de hipótesis para beta
-- 
+  
 ## Notas importantes
 - Los datos se descargan automáticamente desde Yahoo Finance
 - Se utilizan datos semanales de los últimos 10 años
