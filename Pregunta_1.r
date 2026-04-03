@@ -1,6 +1,3 @@
-# Fuerza a R a usar una configuración regional en español para manejar correctamente los caracteres
-Sys.setlocale("LC_ALL", "en_US.UTF-8")
-
 # Se cargan las librerías
 # Ecosistema Financiero
 library(quantmod)            # Se usa para la gestión de datos financieros, descarga de precios y modelado.
