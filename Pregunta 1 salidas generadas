@@ -86,29 +86,29 @@ F-statistic: 299.7 on 1 and 521 DF,  p-value: < 2.2e-16
 
  Summary of estimated coefficients
   Asset      Alpha     Beta
-1  AAPL 0.09072306 1.164343
-2  MSFT 0.12122640 1.029912
+1  AAPL 0.09072305 1.164343
+2  MSFT 0.12122638 1.029912
 3  AMZN 0.05092227 1.462954
 
- Hypothesis Test for Apple (AAPL)
+ Hypothesis test for Apple (AAPL)
 H0: Beta = 0  vs  H1: Beta != 0
-Estimated Beta: 1.1643
+Estimated beta: 1.1643
 t-statistic:    17.3887
-P-value:        9.626309e-54
+P-value:        9.626409e-54
 Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.
 Interpretation: The asset has a statistically significant relationship with the market.
 
- Hypothesis Test for Microsoft (MSFT)
+ Hypothesis test for Microsoft (MSFT)
 H0: Beta = 0  vs  H1: Beta != 0
-Estimated Beta: 1.0299
+Estimated beta: 1.0299
 t-statistic:    21.6928
-P-value:        7.899724e-75
+P-value:        7.899570e-75
 Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.
 Interpretation: The asset has a statistically significant relationship with the market.
 
- Hypothesis Test for Amazon (AMZN)
+ Hypothesis test for Amazon (AMZN)
 H0: Beta = 0  vs  H1: Beta != 0
-Estimated Beta: 1.4630
+Estimated beta: 1.4630
 t-statistic:    17.3108
 P-value:        2.274133e-53
 Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.

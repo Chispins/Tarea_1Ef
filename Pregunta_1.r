@@ -170,9 +170,9 @@ test_hipotesis_beta <- function(modelo, nombre_activo) {
   estadistico_t <- coeficientes[2, "t value"] # Cuántas desviaciones se aleja de cero.
   p_valor <- coeficientes[2, "Pr(>|t|)"] # Probabilidad de error al rechazar la hipótesis nula.
 
-  cat(sprintf("\n Hypothesis Test for %s \n", nombre_activo))
+  cat(sprintf("\n Hypothesis test for %s \n", nombre_activo))
   cat(sprintf("H0: Beta = 0  vs  H1: Beta != 0\n"))
-  cat(sprintf("Estimated Beta: %.4f\n", estimacion_beta))
+  cat(sprintf("Estimated beta: %.4f\n", estimacion_beta))
   cat(sprintf("t-statistic:    %.4f\n", estadistico_t))
   cat(sprintf("P-value:        %e\n", p_valor))
 

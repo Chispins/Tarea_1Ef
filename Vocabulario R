@@ -1,59 +1,73 @@
 # Vocabulario de funciones utilizadas en R
 
 # 1. Configuración del entorno
-- library(): Carga paquetes externos en la sesión de R (por ejemplo: dplyr, quantmod, ggplot2).
+# - library(): Carga paquetes en R (ej. dplyr, ggplot2, quantmod).
 
 # 2. Gestión de fechas y vectores
-- Sys.Date(): Obtiene la fecha actual del sistema.
-- years() (lubridate): Representa una cantidad de años para operar con fechas.
-- year() (lubridate): Extrae el año de una fecha.
-- c(): Crea vectores agrupando múltiples elementos.
+# - Sys.Date(): Obtiene la fecha actual.
+# - as.Date(): Convierte texto a formato de fecha.
+# - years() (lubridate): Permite sumar o restar años a una fecha.
+# - year() (lubridate): Extrae el año de una fecha.
+# - isoweek() (lubridate): Extrae el número de semana del año.
+# - c(): Crea vectores agrupando elementos.
 
-# 3. Manejo de datos financieros
-- getSymbols() (quantmod): Descarga datos financieros desde fuentes externas como Yahoo Finance.
-- Ad() (quantmod): Extrae precios ajustados (considera dividendos y splits).
-- merge(): Combina múltiples series de tiempo alineándose por fecha.
-- colnames(): Permite asignar o modificar nombres de columnas.
-- na.omit(): Elimina filas con valores faltantes (NA).
-- Return.calculate() (PerformanceAnalytics): Calcula retornos financieros (logarítmicos si se usa method = "log").
-- sweep(): Aplica operaciones (como resta) entre un vector y una matriz o data frame.
+# 3. Manejo de datos financieros y matemáticas
+# - getSymbols() (quantmod): Descarga datos financieros (ej. Yahoo Finance).
+# - Ad() (quantmod): Extrae los precios ajustados de las acciones.
+# - merge(): Combina series de tiempo según su fecha.
+# - colnames(): Cambia o asigna nombres a las columnas.
+# - na.omit(): Elimina filas que tengan datos faltantes (NA).
+# - log(): Calcula el logaritmo natural.
+# - Return.calculate() (PerformanceAnalytics): Calcula retornos financieros.
+# - sweep(): Aplica operaciones matemáticas entre vectores y tablas.
+# - suppressWarnings(): Oculta advertencias al ejecutar una función.
 
 # 4. Transformación de datos (Tidyverse)
-- as.data.frame(): Convierte objetos (como xts/zoo) a data frame.
-- data.frame(): Crea una estructura de datos tipo tabla.
-- index() (xts/zoo): Extrae las fechas de una serie temporal.
-- coredata() (xts/zoo): Extrae los valores numéricos de una serie temporal.
-- %>% (pipe): Permite encadenar operaciones de forma secuencial.
-- pivot_longer() (tidyr): Convierte datos de formato ancho a largo.
-  - names_to: Nombre de la variable que contiene los nombres de columnas.
-  - values_to: Nombre de la variable que almacenará los valores.
-- group_by() (dplyr): Agrupa datos para aplicar operaciones por grupo.
-- summarise() (dplyr): Calcula estadísticas resumidas por grupo.
+# - as.data.frame(): Convierte objetos a formato de tabla tradicional.
+# - data.frame(): Crea una tabla de datos.
+# - xts() (xts): Crea una serie de tiempo financiera.
+# - index() (xts): Extrae las fechas de una serie temporal.
+# - coredata() (xts): Extrae solo los valores de la serie (sin fechas).
+# - %>% (pipe): Encadena operaciones (pasa el resultado al siguiente paso).
+# - pivot_longer() (tidyr): Pasa datos de formato ancho a largo (apila).
+#   - names_to: Nombre de la columna para las etiquetas originales.
+#   - values_to: Nombre de la columna para los valores numéricos.
+# - pivot_wider() (tidyr): Pasa datos de formato largo a ancho (desapila).
+# - mutate() (dplyr): Crea nuevas columnas o modifica las existentes.
+# - select() (dplyr): Selecciona columnas específicas.
+# - filter() (dplyr): Filtra filas que cumplan ciertas condiciones.
+# - group_by() (dplyr): Agrupa datos para analizarlos por subgrupos.
+# - ungroup() (dplyr): Desagrupa los datos.
+# - summarise() (dplyr): Calcula resúmenes estadísticos por grupo.
+# - drop_na() (tidyr): Elimina filas con valores NA.
+# - slice_max() (dplyr): Extrae las filas con los valores más altos.
+# - case_when() (dplyr): Crea múltiples condiciones (como varios if-else).
+# - left_join() (dplyr): Une dos tablas manteniendo los datos de la primera.
+# - join_by() y closest() (dplyr): Une tablas buscando la fecha más cercana.
 
 # 5. Econometría y estadística
-- table.Stats() (PerformanceAnalytics): Genera estadísticas descriptivas (media, desviación estándar, skewness, kurtosis, etc.).
-- lm(): Ajusta un modelo de regresión lineal usando MCO.
-- summary(): Entrega resultados del modelo (coeficientes, t-stat, p-value, R²).
-- coef(): Extrae coeficientes del modelo (Alpha y Beta).
+# - table.Stats() (PerformanceAnalytics): Genera estadísticas descriptivas.
+# - lm(): Estima una regresión lineal (Mínimos Cuadrados Ordinarios - MCO).
+# - summary(): Muestra el resumen del modelo (coeficientes, p-value, R²).
+# - coef(): Extrae solo los coeficientes de la regresión (ej. Alpha y Beta).
 
 # 6. Visualización y gráficos
-- graphics.off(): Cierra dispositivos gráficos abiertos para evitar errores.
-- jpeg() / dev.off(): Permiten exportar gráficos como archivos .jpg.
-- par(mfrow = c(filas, columnas)): Divide la ventana gráfica en múltiples paneles.
-- plot.zoo(): Gráfica series de tiempo con eje temporal correcto.
-- ggplot() (ggplot2): Sistema de visualización basado en la gramática de gráficos.
-- aes(): Define las variables visuales del gráfico.
-- geom_line(): Agrega líneas al gráfico.
-- geom_point(): Agrega puntos.
-- geom_hline(): Añade líneas horizontales de referencia (ej: alpha = 0, beta = 1).
-- facet_wrap(): Divide el gráfico en subgráficos por categoría.
-- theme_minimal(), labs(), theme(): Personalización estética del gráfico.
-- ggsave(): Exporta gráficos generados con ggplot2.
+# - graphics.off(): Cierra ventanas gráficas para limpiar memoria.
+# - jpeg() / dev.off(): Guardan el gráfico generado como archivo .jpg.
+# - par(mfrow = c(filas, columnas)): Divide la ventana en varios gráficos.
+# - plot.zoo(): Grafica series de tiempo de forma sencilla.
+# - ggplot() (ggplot2): Crea gráficos avanzados por capas.
+# - aes(): Define ejes y colores del gráfico.
+# - geom_line() / geom_point(): Dibuja líneas o puntos de dispersión.
+# - geom_hline(): Dibuja líneas horizontales de referencia.
+# - facet_wrap(): Divide el gráfico en distintos paneles por categoría.
+# - theme_minimal(), labs(), theme(): Personalizan estética, títulos y leyendas.
+# - ggsave(): Guarda gráficos hechos con ggplot2 en tu carpeta.
 
-# 7. Programación y salida de resultados
-- cat(): Imprime texto en consola (permite saltos de línea con \n).
-- print(): Muestra objetos en la consola.
-- function(): Define funciones personalizadas.
-- sprintf(): Formatea texto con variables (ej: redondeo o notación científica).
-- if() { } else { }: Estructura condicional para toma de decisiones.
-- rownames(): Permite modificar o eliminar los nombres de las filas de un data frame.
+# 7. Programación y control de flujo
+# - cat(): Imprime texto en la consola de R.
+# - print(): Imprime objetos, resultados y tablas.
+# - function(): Crea funciones personalizadas para no repetir código.
+# - sprintf(): Formatea texto y números (ej. fijar cantidad de decimales).
+# - if() { } else { }: Crea condiciones lógicas (si pasa esto, haz esto otro).
+# - rownames(): Modifica o elimina los nombres de las filas en una tabla.
