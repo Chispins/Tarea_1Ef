@@ -1,202 +1,192 @@
+﻿# Tarea 1 - Econometría financiera (Pregunta 1)
+
 # Se cargan las librerías
-# Ecosistema Financiero
-library(quantmod)            # Se usa para la gestión de datos financieros, descarga de precios y modelado.
-library(PerformanceAnalytics) # Se usa para el cálculo de métricas de rendimiento y riesgo.
-library(lubridate)            # Se usa para la manipulación eficiente de formatos de fechas y tiempos.
+# Ecosistema financiero
+library(quantmod) # Descarga de precios históricos y manejo de datos financieros.
+library(PerformanceAnalytics) # Cálculo de estadísticas descriptivas y métricas de riesgo.
 # Ecosistema Tidyverse
-library(dplyr)                # Se usa para la manipulación y transformación de datos (filtrar, agrupar, resumir).
-library(tidyr)                # Se usa para la limpieza y estructuración de datos para que sean legibles (formato tidy).
-library(ggplot2)              # Se usa para la creación de gráficos profesionales y visualización de datos.
+library(lubridate) # Manipulación rápida de fechas (ej. restar años o extraer meses).
+library(dplyr) # Transformación de datos (filtrar, crear columnas, agrupar).
+library(tidyr) # Reestructuración de tablas (pivotar de formato ancho a largo y viceversa).
+library(ggplot2)  # Creación de gráficos estéticos y por capas.
 
 # PARTE A: Obtenga las series de exceso de retorno del mercado y del activo i. Realice estadística descriptiva y
 # grafique estos excesos para cada empresa (4 gráficos en total: 3 correspondientes a los excesos de retorno de los activos
 # y 1 al exceso de retorno del mercado). Explique sus principales hallazgos. (Ocupe datos semanales de los ultimos 10 años)
 
-# Se configuran las fechas y activos
-fecha_fin <- Sys.Date()                             # Se obtiene la fecha actual del sistema
-fecha_inicio <- fecha_fin - years(10)               # Se resta 10 años a la fecha actual usando lubridate
-tickers <- c("AAPL", "MSFT", "AMZN", "^GSPC", "^IRX") # Se definen activos, S&P500 y T-Bill
+fecha_fin <- as.Date("2026-04-01") # Establece la fecha de corte actual.
+fecha_inicio <- fecha_fin - years(11) # Resta 11 años para tener 10 años de análisis + 1 año base para retornos.
+tickers <- c("AAPL", "MSFT", "AMZN", "^GSPC", "^IRX") # Símbolos de Yahoo Finance (Activos, S&P500 y T-Bill).
 
-# Se descargan los datos desde Yahoo Finance
-# periodicity = "weekly" para descargar los datos con frecuencia semanal
-getSymbols(tickers, src = "yahoo", from = fecha_inicio, to = fecha_fin, periodicity = "weekly")
+# Se descargan los datos "diarios"
+getSymbols(tickers, src = "yahoo", from = fecha_inicio, to = fecha_fin, periodicity = "daily")
 
 # Se preparan los precios ajustados
-# Ad() extrae el precio ajustado (por dividendos y splits) de cada objeto descargado
-precios <- merge(Ad(AAPL), Ad(MSFT), Ad(AMZN), Ad(GSPC), Ad(IRX))
-colnames(precios) <- c("AAPL", "MSFT", "AMZN", "Mercado", "IRX") # Se renombraron las columnas
-precios <- na.omit(precios)                                      # Se eliminan las filas con valores faltantes
+precios <- merge(Ad(AAPL), Ad(MSFT), Ad(AMZN), Ad(GSPC), Ad(IRX)) # Une solo la columna de "precios ajustados" de cada activo.
+colnames(precios) <- c("AAPL", "MSFT", "AMZN", "Mercado", "IRX") # Simplifica los nombres de las columnas.
+precios <- na.omit(precios) # Limpia la base eliminando días sin cotización (feriados).
 
-# Se cálcularon los retornos y tasa Libre de riesgo (RF)
-retornos <- Return.calculate(precios[, 1:4], method = "log")     # Se calculan los retornos logarítmicos
-# Se convierte la tasa anual del tesoro (IRX) a una tasa efectiva semanal
-rf_semanal <- (1 + precios$IRX/100)^(1/52) - 1
-colnames(rf_semanal) <- "RF"
+# Se transforman a un formato más amigable
+df_precios <- data.frame(date = index(precios), coredata(precios)) %>% # Pasa de objeto temporal (xts) a tabla normal (data.frame).
+  pivot_longer(cols = -date, names_to = "Activo", values_to = "Precio") # Apila los activos para facilitar cálculos en grupo.
 
-# Se consolidan los retornos y se hace una limpieza final
-retornos <- merge(retornos, rf_semanal)
-retornos <- na.omit(retornos)
+# Calcular retornos comparando con la fecha más cercana del año anterior
+df_retornos <- df_precios %>%
+  mutate(fecha_ano_anterior = date - years(1)) %>% # Crea referencia temporal de t-1 año.
+  left_join(
+    df_precios,
+    by = join_by(Activo, closest(fecha_ano_anterior >= date)), # Cruza la base buscando el precio del año pasado (o el día hábil más cercano).
+    suffix = c("", "_prev") # Distingue entre el precio de hoy y el del año pasado.
+  ) %>%
+  mutate(
+    retorno = case_when(
+      Activo == "IRX" ~ Precio / 100, # La tasa libre de riesgo ya viene anualizada, solo se pasa a decimal.
+      TRUE ~ suppressWarnings(log(Precio / Precio_prev)) # Para las acciones, calcula el retorno logarítmico interanual.
+    )
+  ) %>%
+  filter(date >= (fecha_fin - years(10))) # Recorta el año base extra para dejar exactamente 10 años de estudio.
 
-# Se calculan los excesos de retorno
-# Se resta la tasa RF a cada activo (R_i - R_f) para obtener el premio por riesgo
-series_excesos <- sweep(retornos[, 1:4], 1, retornos$RF, FUN = "-")
-colnames(series_excesos) <- c("AAPL_ex", "MSFT_ex", "AMZN_ex", "Mercado_ex")
+# Se pasa a formato ancho y se filtra para obtener datos "semanales"
+df_excesos_semanales <- df_retornos %>%
+  select(date, Activo, retorno) %>%
+  pivot_wider(names_from = Activo, values_from = retorno) %>% # Desapila los activos de vuelta a columnas individuales.
+  drop_na() %>%
+  group_by(anio = year(date), semana = isoweek(date)) %>% # Agrupa los datos diariamente por la semana a la que pertenecen.
+  slice_max(date, n = 1, with_ties = FALSE) %>% # Extrae únicamente el último día hábil de cada semana.
+  ungroup() %>%
+  mutate(
+    # Calcula el "premio por riesgo" (Exceso) restando la tasa libre de riesgo (IRX) a cada retorno.
+    AAPL_ex = AAPL - IRX,
+    MSFT_ex = MSFT - IRX,
+    AMZN_ex = AMZN - IRX,
+    Mercado_ex = Mercado - IRX
+  ) %>%
+  select(date, AAPL_ex, MSFT_ex, AMZN_ex, Mercado_ex) # Mantiene solo las columnas de exceso.
 
-# Se hace la "Estadística descriptiva"
-cat(" Estadística descriptiva de los excesos de retorno \n")
-# Se genera tabla con media, desviación estándar, skewness, kurtosis, etc.
-print(table.Stats(series_excesos))
+# Se vuelve a convertir a formato de serie de tiempo (xts)
+series_excesos <- xts(df_excesos_semanales[,-1], order.by = df_excesos_semanales$date) # Requisito de la librería PerformanceAnalytics.
+
+# Estadística descriptiva
+cat("\n Descriptive Statistics of Excess Returns \n")
+print(table.Stats(series_excesos)) # Genera automáticamente media, varianza, asimetría, etc.
 
 # Se generan los gráficos de serie de tiempo
-graphics.off() # # Cierra cualquier dispositivo gráfico previo para evitar conflictos de memoria
+graphics.off() # Limpia la memoria gráfica de R.
+jpeg("graficos_excesos.jpg", width = 1200, height = 900, res = 120) # Guarda la imagen en alta calidad.
 
-# Se exportan los gráficos a un archivo local en .jpg
-jpeg("graficos_excesos.jpg", width = 1200, height = 900, res = 120)
+par(mfrow = c(2, 2)) # Divide el lienzo en una cuadrícula de 2x2.
+plot.zoo(series_excesos$AAPL_ex, main = "1. Excess return: AAPL", ylab = "Excess", xlab = "Date", col = "blue", lwd = 1)
+plot.zoo(series_excesos$MSFT_ex, main = "2. Excess return: MSFT", ylab = "Excess", xlab = "Date", col = "darkgreen", lwd = 1)
+plot.zoo(series_excesos$AMZN_ex, main = "3. Excess return: AMZN", ylab = "Excess", xlab = "Date", col = "purple", lwd = 1)
+plot.zoo(series_excesos$Mercado_ex, main = "4. Excess return: Market (S&P 500)", ylab = "Excess", xlab = "Date", col = "red", lwd = 1)
 
-par(mfrow = c(2, 2)) # Divide el lienzo en una cuadrícula de 2 filas y 2 columnas
+par(mfrow = c(1, 1)) # Restaura el lienzo a formato único.
+dev.off() # Guarda el archivo JPG en la carpeta.
 
-# Se grafica cada serie individualmente usando zoo para manejo de fechas en el eje X
-plot.zoo(series_excesos$AAPL_ex, main = "1. Exceso de retorno: AAPL", ylab = "Exceso", xlab = "Fecha", col = "blue", lwd = 1)
-plot.zoo(series_excesos$MSFT_ex, main = "2. Exceso de retorno: MSFT", ylab = "Exceso", xlab = "Fecha", col = "darkgreen", lwd = 1)
-plot.zoo(series_excesos$AMZN_ex, main = "3. Exceso de retorno: AMZN", ylab = "Exceso", xlab = "Fecha", col = "purple", lwd = 1)
-plot.zoo(series_excesos$Mercado_ex, main = "4. Exceso de retorno: Mercado (S&P 500)", ylab = "Exceso", xlab = "Fecha", col = "red", lwd = 1)
+# PARTE B: Utilizando las series obtenidas anteriormente, estime los parámetros alfa y beta
+# para cada empresa e interprete los coeficientes.
 
-par(mfrow = c(1, 1)) # Se restablece el lienzo a un solo gráfico
-dev.off()            # Se finaliza la escritura del archivo y lo guarda
+df_excesos <- as.data.frame(series_excesos) # Se regresa al formato data.frame para correr regresiones estándar.
 
-# PARTE B: Utilizando las series obtenidas anteriormente, estime los parámetros α y β para cada empresa e
-# interprete los coeficientes.
-
-# Convertir el objeto de series temporales (xts/zoo) a un data frame estándar para facilitar el uso de lm()
-df_excesos <- as.data.frame(series_excesos)
-
-# Regresión para AAPL
-cat("\n Resultados regresión AAPL \n")
-# lm() ajusta un modelo lineal: el exceso del activo es explicado por el exceso del mercado
+# Estimación MCO (lm): El exceso del activo depende (~) del exceso del mercado.
+cat("\n Regression results: AAPL \n")
 modelo_aapl <- lm(AAPL_ex ~ Mercado_ex, data = df_excesos)
-print(summary(modelo_aapl)) # Muestra R-cuadrado, errores estándar y significancia estadística
+print(summary(modelo_aapl))
 
-# Regresión para MSFT
-cat("\n Resultados regresión MSFT \n")
+cat("\n Regression results: MSFT \n")
 modelo_msft <- lm(MSFT_ex ~ Mercado_ex, data = df_excesos)
 print(summary(modelo_msft))
 
-# Regresión para AMZN
-cat("\n Resultados regresión AMZN \n")
+cat("\n Regression results: AMZN \n")
 modelo_amzn <- lm(AMZN_ex ~ Mercado_ex, data = df_excesos)
 print(summary(modelo_amzn))
 
-# Se crea un data frame para consolidar los resultados clave de los tres modelos
+# Se consolida la información clave en una tabla resumen.
 tabla_coeficientes <- data.frame(
-  Activo = c("AAPL", "MSFT", "AMZN"),
-
-  # coef(...)[1] extrae el Intercepto (Alpha de Jensen): mide el valor extra generado
-  Alpha  = c(coef(modelo_aapl)[1], coef(modelo_msft)[1], coef(modelo_amzn)[1]),
-
-  # coef(...)[2] extrae la pendiente (Beta): mide la sensibilidad del activo ante el mercado
-  Beta = c(coef(modelo_aapl)[2], coef(modelo_msft)[2], coef(modelo_amzn)[2])
+  Asset = c("AAPL", "MSFT", "AMZN"),
+  Alpha = c(coef(modelo_aapl)[1], coef(modelo_msft)[1], coef(modelo_amzn)[1]), # Extrae el Intercepto.
+  Beta  = c(coef(modelo_aapl)[2], coef(modelo_msft)[2], coef(modelo_amzn)[2])  # Extrae la pendiente.
 )
 
-# Se limpian los nombres de las filas para una presentación más estética
-rownames(tabla_coeficientes) <- NULL
+rownames(tabla_coeficientes) <- NULL # Limpia los nombres de las filas por estética.
 
-# Se imprime el resumen final
-cat("\n Resumen de coeficientes estimados \n")
+cat("\n Summary of estimated coefficients \n")
 print(tabla_coeficientes)
 
-# PARTE C: Con el fin de analizar la evolución temporal de α y β, calcule estos parámetros
+# PARTE C: Con el fin de analizar la evolución temporal de alfa y beta, calcule estos parámetros
 # para cada año y para cada stock. Luego, grafique su evolución en el tiempo e interprete los resultados.
 
-# Se crea un data frame dinámico uniendo las fechas (index) con los datos numéricos
 df_dinamico <- data.frame(Fecha = index(series_excesos), coredata(series_excesos))
-# Se extraen el año de cada observación para realizar agrupaciones anuales
-df_dinamico$Year <- year(df_dinamico$Fecha)
+df_dinamico$Year <- year(df_dinamico$Fecha) # Se extrae el año para agrupar los cálculos anualmente.
 
-# Se transforman los datos de formato "ancho" a formato "largo" para facilitar el uso de ggplot2 y dplyr
 df_largo <- df_dinamico %>%
   pivot_longer(cols = c("AAPL_ex", "MSFT_ex", "AMZN_ex"),
                names_to = "Activo",
-               values_to = "Exceso_Activo")
+               values_to = "Exceso_Activo") # Formato largo es necesario para separar paneles en ggplot2.
 
-# Se calculan los coeficientes alpha y beta agrupados por año y por cada activo
+# Se corre una regresión distinta para cada año y cada empresa.
 resultados_anuales <- df_largo %>%
   group_by(Year, Activo) %>%
   summarise(
-    Alpha = coef(lm(Exceso_Activo ~ Mercado_ex))[1], # Intercepto de la regresión anual
-    Beta  = coef(lm(Exceso_Activo ~ Mercado_ex))[2], # Pendiente (beta) de la regresión anual
-    .groups = "drop" # Desagrupa al finalizar para evitar problemas en cálculos futuros
+    Alpha = coef(lm(Exceso_Activo ~ Mercado_ex))[1], # Intercepto anual.
+    Beta  = coef(lm(Exceso_Activo ~ Mercado_ex))[2], # Pendiente anual.
+    .groups = "drop" # Desagrupa para evitar errores posteriores.
   )
 
-# Se resetea la ventana de gráficos para limpiar configuraciones previas
 graphics.off()
 
-# Se genera el gráfico de evolución del alpha
+# Gráfico de evolución del alpha
 grafico_alpha <- ggplot(resultados_anuales, aes(x = Year, y = Alpha, color = Activo)) +
-  geom_line(linewidth = 1) +                  # Línea de tendencia temporal
-  geom_point(size = 2) +                      # Puntos para marcar cada año
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") + # Referencia de Alpha = 0
-  facet_wrap(~Activo, ncol = 1) +             # Separar un gráfico por cada empresa (verticalmente)
-  theme_minimal() +                           # Estilo visual limpio y moderno
-  labs(title = "Evolución temporal del alpha por año",
-       x = "Año", y = "Alpha estimado") +
-  theme(legend.position = "none")             # Ocultar leyenda (el título de la faceta ya indica el activo)
-
-# Se guarda el gráfico de alpha
-ggsave("evolucion_alpha.jpg", plot = grafico_alpha, width = 8, height = 6)
-
-# Se genera el gráfico de evolución del beta
-grafico_beta <- ggplot(resultados_anuales, aes(x = Year, y = Beta, color = Activo)) +
-  geom_line(linewidth = 1) +                  # Línea de tendencia temporal
-  geom_point(size = 2) +                      # Puntos para marcar cada año
-  geom_hline(yintercept = 1, linetype = "dashed", color = "black") + # Referencia de Beta = 1 (Riesgo Mercado)
-  facet_wrap(~Activo, ncol = 1) +             # Separar un gráfico por cada empresa
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") + # Línea de referencia CAPM (Alpha teórico = 0).
+  facet_wrap(~Activo, ncol = 1) + # Separa el lienzo en 3 gráficos verticales (uno por acción).
   theme_minimal() +
-  labs(title = "Evolución temporal del beta por año",
-       x = "Año", y = "Beta estimado") +
+  labs(title = "Alpha evolution over time", x = "Year", y = "Estimated alpha") +
   theme(legend.position = "none")
 
-# Guardar el gráfico de Beta en la carpeta de trabajo
+ggsave("evolucion_alpha.jpg", plot = grafico_alpha, width = 8, height = 6)
+
+# Gráfico de evolución del beta
+grafico_beta <- ggplot(resultados_anuales, aes(x = Year, y = Beta, color = Activo)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "black") + # Línea de referencia (beta = 1 implica mismo riesgo que el mercado).
+  facet_wrap(~Activo, ncol = 1) +
+  theme_minimal() +
+  labs(title = "Beta evolution over time", x = "Year", y = "Estimated beta") +
+  theme(legend.position = "none")
+
 ggsave("evolucion_beta.jpg", plot = grafico_beta, width = 8, height = 6)
 
-# PARTE D: Testee la hipótesis nula β = 0 para cada empresa (los encontrados en el ítem b).
+# PARTE D: Testee la hipótesis nula beta = 0 para cada empresa (los encontrados en el ítem b).
 # Interprete sus resultados y relaciónelos con la teoría financiera subyacente al modelo CAPM.
 
-# Se define una función personalizada para automatizar el test de cada activo
+# Se encapsula el análisis estadístico en una función para no repetir código.
 test_hipotesis_beta <- function(modelo, nombre_activo) {
 
-  # Se extrae la matriz de coeficientes del resumen del modelo lineal
-  coeficientes <- summary(modelo)$coefficients
+  coeficientes <- summary(modelo)$coefficients # Extrae la matriz de resultados t, errores, etc.
+  estimacion_beta <- coeficientes[2, "Estimate"] # Valor puntual del beta.
+  estadistico_t <- coeficientes[2, "t value"] # Cuántas desviaciones se aleja de cero.
+  p_valor <- coeficientes[2, "Pr(>|t|)"] # Probabilidad de error al rechazar la hipótesis nula.
 
-  # Se obtiene la estimación puntual del beta (pendiente del modelo)
-  estimacion_beta <- coeficientes[2, "Estimate"]
+  cat(sprintf("\n Hypothesis Test for %s \n", nombre_activo))
+  cat(sprintf("H0: Beta = 0  vs  H1: Beta != 0\n"))
+  cat(sprintf("Estimated Beta: %.4f\n", estimacion_beta))
+  cat(sprintf("t-statistic:    %.4f\n", estadistico_t))
+  cat(sprintf("P-value:        %e\n", p_valor))
 
-  # Se obtienen el estadístico t (mide cuántas desviaciones estándar se aleja el beta de cero)
-  estadistico_t <- coeficientes[2, "t value"]
-
-  # Se obtiene el p-valor (probabilidad de observar este beta si la hipótesis nula fuera cierta)
-  p_valor <- coeficientes[2, "Pr(>|t|)"]
-
-  # Se imprime el encabezado y planteamiento de las hipótesis estadísticas
-  cat(sprintf("\n Test de Hipótesis para %s \n", nombre_activo))
-  cat(sprintf("H0: Beta = 0  vs  H1: Beta != 0\n")) # Hipótesis nula vs alternativa
-
-  # Se muestran los resultados numéricos formateados con 4 decimales y notación científica para el p-valor
-  cat(sprintf("Beta estimado: %.4f\n", estimacion_beta))
-  cat(sprintf("Estadístico t: %.4f\n", estadistico_t))
-  cat(sprintf("P-valor:       %e\n", p_valor))
-
-  # Se establece la lógica de decisión estadística basada en el nivel de significancia del 5% (alfa = 0.05)
+  # Lógica de decisión al 5% de nivel de significancia estadística.
   if(p_valor < 0.05) {
-    cat("Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.\n")
-    cat("Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.\n")
+    cat("Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.\n")
+    cat("Interpretation: The asset has a statistically significant relationship with the market.\n")
   } else {
-    cat("Conclusión: NO SE RECHAZA la hipótesis nula (H0) al 5% de significancia.\n")
-    cat("Interpretación: No hay evidencia suficiente para decir que el activo se mueve con el mercado.\n")
+    cat("Conclusion: DO NOT REJECT the null hypothesis (H0) at the 5% significance level.\n")
+    cat("Interpretation: There is no sufficient evidence to conclude that the asset moves with the market.\n")
   }
 }
 
-# Se ejecutan la función para cada uno de los modelos estimados previamente
+# Ejecuta el test para las 3 acciones.
 test_hipotesis_beta(modelo_aapl, "Apple (AAPL)")
 test_hipotesis_beta(modelo_msft, "Microsoft (MSFT)")
 test_hipotesis_beta(modelo_amzn, "Amazon (AMZN)")
-

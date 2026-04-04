@@ -1,114 +1,116 @@
 [1] "AAPL" "MSFT" "AMZN" "GSPC" "IRX"
- Estadística descriptiva de los excesos de retorno
+
+ Descriptive Statistics of Excess Returns
                  AAPL_ex  MSFT_ex  AMZN_ex Mercado_ex
-Observations    522.0000 522.0000 522.0000   522.0000
+Observations    523.0000 523.0000 523.0000   523.0000
 NAs               0.0000   0.0000   0.0000     0.0000
-Minimum          -0.1927  -0.1453  -0.1498    -0.1623
-Quartile 1       -0.0173  -0.0156  -0.0186    -0.0097
-Median            0.0056   0.0044   0.0031     0.0030
-Arithmetic Mean   0.0040   0.0035   0.0033     0.0018
-Geometric Mean    0.0033   0.0029   0.0025     0.0015
-Quartile 3        0.0262   0.0215   0.0279     0.0145
-Maximum           0.1374   0.1161   0.1507     0.1142
-SE Mean           0.0017   0.0014   0.0018     0.0010
-LCL Mean (0.95)   0.0007   0.0007  -0.0002    -0.0003
-UCL Mean (0.95)   0.0073   0.0062   0.0069     0.0038
-Variance          0.0015   0.0010   0.0017     0.0006
-Stdev             0.0384   0.0320   0.0413     0.0237
-Skewness         -0.4140  -0.0942  -0.2317    -0.8987
-Kurtosis          2.4525   1.4516   1.4716     7.5248
+Minimum          -0.3527  -0.4503  -0.7396    -0.2614
+Quartile 1        0.0350   0.1272   0.0417     0.0294
+Median            0.1802   0.2522   0.2171     0.1083
+Arithmetic Mean   0.1992   0.2171   0.1872     0.0931
+Geometric Mean    0.1757   0.2007   0.1366     0.0858
+Quartile 3        0.3336   0.3492   0.4109     0.1586
+Maximum           0.8964   0.5573   0.7177     0.4867
+SE Mean           0.0104   0.0081   0.0131     0.0054
+LCL Mean (0.95)   0.1787   0.2013   0.1614     0.0825
+UCL Mean (0.95)   0.2196   0.2330   0.2129     0.1038
+Variance          0.0565   0.0342   0.0897     0.0153
+Stdev             0.2378   0.1850   0.2996     0.1237
+Skewness          0.3611  -1.0746  -0.8445    -0.3015
+Kurtosis         -0.1233   1.0630   0.5520     0.8297
 null device
           1
 
- Resultados regresión AAPL
+ Regression results: AAPL
 
 Call:
 lm(formula = AAPL_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max
--0.107932 -0.014337 -0.001727  0.013692  0.125119
+     Min       1Q   Median       3Q      Max
+-0.37168 -0.13141 -0.02789  0.09216  0.59478
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)
-(Intercept) 0.002056   0.001233   1.667   0.0961 .
-Mercado_ex  1.108024   0.051889  21.354   <2e-16 ***
+(Intercept)  0.09072    0.01036   8.754   <2e-16 ***
+Mercado_ex   1.16434    0.06696  17.389   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02809 on 520 degrees of freedom
-Multiple R-squared:  0.4672,	Adjusted R-squared:  0.4662
-F-statistic:   456 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.1893 on 521 degrees of freedom
+Multiple R-squared:  0.3672,	Adjusted R-squared:  0.366
+F-statistic: 302.4 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresión MSFT
+ Regression results: MSFT
 
 Call:
 lm(formula = MSFT_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max
--0.084645 -0.011474 -0.000069  0.012271  0.101341
+     Min       1Q   Median       3Q      Max
+-0.32409 -0.08310  0.02064  0.09913  0.28860
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)
-(Intercept) 0.0016949  0.0009641   1.758   0.0793 .
-Mercado_ex  0.9817303  0.0405687  24.199   <2e-16 ***
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 0.121226   0.007348   16.50   <2e-16 ***
+Mercado_ex  1.029912   0.047477   21.69   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.02196 on 520 degrees of freedom
-Multiple R-squared:  0.5297,	Adjusted R-squared:  0.5288
-F-statistic: 585.6 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.1342 on 521 degrees of freedom
+Multiple R-squared:  0.4746,	Adjusted R-squared:  0.4736
+F-statistic: 470.6 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resultados regresión AMZN
+ Regression results: AMZN
 
 Call:
 lm(formula = AMZN_ex ~ Mercado_ex, data = df_excesos)
 
 Residuals:
-      Min        1Q    Median        3Q       Max
--0.185384 -0.015089 -0.000246  0.015414  0.203422
+     Min       1Q   Median       3Q      Max
+-0.48478 -0.17061 -0.01382  0.20426  0.50762
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)
-(Intercept) 0.001428   0.001441   0.991    0.322
-Mercado_ex  1.054965   0.060644  17.396   <2e-16 ***
+(Intercept)  0.05092    0.01308   3.893 0.000112 ***
+Mercado_ex   1.46295    0.08451  17.311  < 2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 0.03283 on 520 degrees of freedom
-Multiple R-squared:  0.3679,	Adjusted R-squared:  0.3667
-F-statistic: 302.6 on 1 and 520 DF,  p-value: < 2.2e-16
+Residual standard error: 0.2389 on 521 degrees of freedom
+Multiple R-squared:  0.3651,	Adjusted R-squared:  0.3639
+F-statistic: 299.7 on 1 and 521 DF,  p-value: < 2.2e-16
 
 
- Resumen de coeficientes estimados
-  Activo       Alpha      Beta
-1   AAPL 0.002055830 1.1080240
-2   MSFT 0.001694905 0.9817303
-3   AMZN 0.001427913 1.0549647
+ Summary of estimated coefficients
+  Asset      Alpha     Beta
+1  AAPL 0.09072306 1.164343
+2  MSFT 0.12122640 1.029912
+3  AMZN 0.05092227 1.462954
 
- Test de Hipótesis para Apple (AAPL)
+ Hypothesis Test for Apple (AAPL)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.1080
-Estadístico t: 21.3539
-P-valor:       4.102722e-73
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Estimated Beta: 1.1643
+t-statistic:    17.3887
+P-value:        9.626309e-54
+Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.
+Interpretation: The asset has a statistically significant relationship with the market.
 
- Test de Hipótesis para Microsoft (MSFT)
+ Hypothesis Test for Microsoft (MSFT)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 0.9817
-Estadístico t: 24.1992
-P-valor:       3.207818e-87
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Estimated Beta: 1.0299
+t-statistic:    21.6928
+P-value:        7.899724e-75
+Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.
+Interpretation: The asset has a statistically significant relationship with the market.
 
- Test de Hipótesis para Amazon (AMZN)
+ Hypothesis Test for Amazon (AMZN)
 H0: Beta = 0  vs  H1: Beta != 0
-Beta estimado: 1.0550
-Estadístico t: 17.3960
-P-valor:       9.295906e-54
-Conclusión: Se RECHAZA la hipótesis nula (H0) al 5% de significancia.
-Interpretación: El activo tiene una relación estadísticamente significativa con el mercado.
+Estimated Beta: 1.4630
+t-statistic:    17.3108
+P-value:        2.274133e-53
+Conclusion: REJECT the null hypothesis (H0) at the 5% significance level.
+Interpretation: The asset has a statistically significant relationship with the market.
+
