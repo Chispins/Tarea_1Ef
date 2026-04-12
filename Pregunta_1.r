@@ -206,82 +206,89 @@ df$Mercado_ex2 <- df$Mercado_ex^2
 # el mercado dependiendo de su estado. Se puede modelar de la forma (Modelo 2): (Ri − Rf) = γ+δ1(Rm − Rf)+δ2(Rm − Rf)2 +µ
 # Obtenga los coeficientes γ, δ1 y δ2 e interprete estos coeficientes
 
-cat("\n\n")
-cat("PART A: Estimation of Model 2 (Quadratic CAPM)\n")
-cat("\n\n")
+cat("\n\n")  # Salto de línea
+cat("PART A: Estimation of Model 2 (Quadratic CAPM)\n")  # Título de la parte
+cat("\n\n")  # Salto de línea
 
 # AAPL
-cat("\n Model 2: AAPL \n")
-modelo2_aapl <- lm(AAPL_ex ~ Mercado_ex + Mercado_ex2, data = df)
-print(summary(modelo2_aapl))
+cat("\n Model 2: AAPL \n")  # Indica activo AAPL
+modelo2_aapl <- lm(AAPL_ex ~ Mercado_ex + Mercado_ex2, data = df)  # Regresión cuadrática (CAPM extendido)
+print(summary(modelo2_aapl))  # Muestra resultados del modelo
 
 # MSFT
-cat("\n Model 2: MSFT \n")
-modelo2_msft <- lm(MSFT_ex ~ Mercado_ex + Mercado_ex2, data = df)
-print(summary(modelo2_msft))
+cat("\n Model 2: MSFT \n")  # Indica activo MSFT
+modelo2_msft <- lm(MSFT_ex ~ Mercado_ex + Mercado_ex2, data = df)  # Regresión cuadrática
+print(summary(modelo2_msft))  # Resultados del modelo
 
 # AMZN
-cat("\n Model 2: AMZN \n")
-modelo2_amzn <- lm(AMZN_ex ~ Mercado_ex + Mercado_ex2, data = df)
-print(summary(modelo2_amzn))
+cat("\n Model 2: AMZN \n")  # Indica activo AMZN
+modelo2_amzn <- lm(AMZN_ex ~ Mercado_ex + Mercado_ex2, data = df)  # Regresión cuadrática
+print(summary(modelo2_amzn))  # Resultados del modelo
 
-# Tabla resumen Modelo 2
+# Construcción de una tabla resumen con coeficientes del Modelo 2
 tabla_m2 <- data.frame(
-  Asset  = c("AAPL", "MSFT", "AMZN"),
-  Gamma  = c(coef(modelo2_aapl)[1], coef(modelo2_msft)[1], coef(modelo2_amzn)[1]),
-  Delta1 = c(coef(modelo2_aapl)[2], coef(modelo2_msft)[2], coef(modelo2_amzn)[2]),
-  Delta2 = c(coef(modelo2_aapl)[3], coef(modelo2_msft)[3], coef(modelo2_amzn)[3])
+  Asset = c("AAPL", "MSFT", "AMZN"),  # Nombres de los activos
+  Gamma = c(coef(modelo2_aapl)[1], coef(modelo2_msft)[1], coef(modelo2_amzn)[1]),  # Intercepto (γ)
+  Delta1 = c(coef(modelo2_aapl)[2], coef(modelo2_msft)[2], coef(modelo2_amzn)[2]),  # Efecto lineal (δ1)
+  Delta2 = c(coef(modelo2_aapl)[3], coef(modelo2_msft)[3], coef(modelo2_amzn)[3])   # Efecto cuadrático (δ2)
 )
-cat("\n Summary of coefficients Model 2 \n")
-print(tabla_m2)
+
+cat("\n Summary of coefficients Model 2 \n")  # Título de la tabla
+print(tabla_m2)  # Muestra la tabla resumen
 
 # PARTE B: Compare los coeficientes anteriores con los coeficientes α y β del Modelo 1 obtenidos en
 # la tarea anterior (Práctica 1, Pregunta 1). Considerando todos los coeficientes obtenidos y tomando
 # un punto de vista económico-financiero, ¿cuál modelo le parece se acerca mejor a la realidad de los
 # datos? Justifique.
 
-cat("\n\n")
-cat("PART B: Comparison M1 vs M2\n")
-cat("\n\n")
+cat("\n\n")  # Salto de línea
+cat("PART B: Comparison M1 vs M2\n")  # Título de la parte
+cat("\n\n")  # Salto de línea
 
-# Modelo 1 estimado en df (mismo marco de datos para una comparación clara)
-modelo1_aapl <- lm(AAPL_ex ~ Mercado_ex, data = df)
-modelo1_msft <- lm(MSFT_ex ~ Mercado_ex, data = df)
-modelo1_amzn <- lm(AMZN_ex ~ Mercado_ex, data = df)
+# Estimación del Modelo 1 (lineal) para cada activo usando el mismo dataset
+modelo1_aapl <- lm(AAPL_ex ~ Mercado_ex, data = df)  # AAPL vs mercado
+modelo1_msft <- lm(MSFT_ex ~ Mercado_ex, data = df)  # MSFT vs mercado
+modelo1_amzn <- lm(AMZN_ex ~ Mercado_ex, data = df)  # AMZN vs mercado
 
+# Construcción de una tabla comparativa entre Modelo 1 (lineal) y Modelo 2 (cuadrático)
 tabla_comparacion <- data.frame(
-  Asset         = rep(c("AAPL", "MSFT", "AMZN"), each = 2),
-  Model         = rep(c("M1 (linear)", "M2 (quadratic)"), times = 3),
+  Asset = rep(c("AAPL", "MSFT", "AMZN"), each = 2),  # Repite cada activo 2 veces (M1 y M2)
+  Model = rep(c("M1 (linear)", "M2 (quadratic)"), times = 3),  # Etiquetas de modelos
   Alpha_or_Gamma = c(
-    coef(modelo1_aapl)[1], coef(modelo2_aapl)[1],
+    coef(modelo1_aapl)[1], coef(modelo2_aapl)[1],  # Intercepto M1 vs coef. constante M2
     coef(modelo1_msft)[1], coef(modelo2_msft)[1],
     coef(modelo1_amzn)[1], coef(modelo2_amzn)[1]
   ),
   Beta_or_Delta1 = c(
-    coef(modelo1_aapl)[2], coef(modelo2_aapl)[2],
+    coef(modelo1_aapl)[2], coef(modelo2_aapl)[2],  # Pendiente lineal (beta o delta1)
     coef(modelo1_msft)[2], coef(modelo2_msft)[2],
     coef(modelo1_amzn)[2], coef(modelo2_amzn)[2]
   ),
   Delta2 = c(
-    NA, coef(modelo2_aapl)[3],
+    NA, coef(modelo2_aapl)[3],  # Solo existe en modelo cuadrático
     NA, coef(modelo2_msft)[3],
     NA, coef(modelo2_amzn)[3]
   ),
   Adj_R2 = c(
-    summary(modelo1_aapl)$adj.r.squared, summary(modelo2_aapl)$adj.r.squared,
+    summary(modelo1_aapl)$adj.r.squared, summary(modelo2_aapl)$adj.r.squared,  # R2 ajustado
     summary(modelo1_msft)$adj.r.squared, summary(modelo2_msft)$adj.r.squared,
     summary(modelo1_amzn)$adj.r.squared, summary(modelo2_amzn)$adj.r.squared
   )
 )
 
-cat("\n Comparison table M1 vs M2:\n")
-print(tabla_comparacion)
+cat("\n Comparison table M1 vs M2:\n")  # Mensaje previo a la tabla
+print(tabla_comparacion)  # Muestra la tabla
 
-cat("\n Delta2 significance by asset \n")
+cat("\n Delta2 significance by asset \n")  # Título de la siguiente parte
+
+# Loop para evaluar la significancia de delta2 en cada activo (modelo cuadrático)
 for (nm in list(list("AAPL", modelo2_aapl),
                 list("MSFT", modelo2_msft),
                 list("AMZN", modelo2_amzn))) {
-  s <- summary(nm[[2]])$coefficients
+
+  s <- summary(nm[[2]])$coefficients  # Extrae coeficientes del modelo
+
+  # Imprime valor estimado, estadístico t y p-value de delta2
   cat(sprintf("%s: delta2 = %.5f,  t = %.4f,  p-value = %.4f\n",
               nm[[1]], s[3, "Estimate"], s[3, "t value"], s[3, "Pr(>|t|)"]))
 }
@@ -290,37 +297,46 @@ for (nm in list(list("AAPL", modelo2_aapl),
 # y muestre cuál es el modelo elegido (Modelo 1 o Modelo 2) con cada uno de esos criterios.
 # Explique y fundamente su respuesta
 
-cat("\n\n")
-cat("PART C: Model Selection Criteria\n")
-cat("\n\n")
+cat("\n\n")  # Salto de línea
+cat("PART C: Model Selection Criteria\n")  # Título de la parte
+cat("\n\n")  # Salto de línea
 
-# Hannan-Quinn (no incluido en la base R AIC / BIC, calculado manualmente)
+# Función para calcular el criterio Hannan-Quinn (no está en R por defecto)
 HQ <- function(modelo) {
-  n  <- length(residuals(modelo))
-  k  <- length(coef(modelo))
-  s2 <- sum(residuals(modelo)^2) / n
-  log(s2) + 2 * k * log(log(n)) / n
+  n  <- length(residuals(modelo))  # Número de observaciones
+  k  <- length(coef(modelo))       # Número de parámetros estimados
+  s2 <- sum(residuals(modelo)^2) / n  # Varianza de los residuos
+  log(s2) + 2 * k * log(log(n)) / n   # Fórmula del criterio HQ
 }
 
+# Función que compara dos modelos (M1 vs M2) usando distintos criterios
 compute_criteria <- function(m1, m2, name) {
-  cat(sprintf("\n %s \n", name))
-  cat(sprintf("%-20s %12s %12s\n", "Criterion", "Model 1", "Model 2"))
-  cat(sprintf("%-20s %12.6f %12.6f\n", "Adjusted R2",
-              summary(m1)$adj.r.squared, summary(m2)$adj.r.squared))
-  cat(sprintf("%-20s %12.4f %12.4f\n", "AIC", AIC(m1), AIC(m2)))
-  cat(sprintf("%-20s %12.4f %12.4f\n", "BIC", BIC(m1), BIC(m2)))
-  cat(sprintf("%-20s %12.4f %12.4f\n", "HQ",  HQ(m1),  HQ(m2)))
 
+  cat(sprintf("\n %s \n", name))  # Nombre del activo
+  cat(sprintf("%-20s %12s %12s\n", "Criterion", "Model 1", "Model 2"))  # Encabezado
+
+  # Cálculo y comparación de métricas
+  cat(sprintf("%-20s %12.6f %12.6f\n", "Adjusted R2",
+              summary(m1)$adj.r.squared, summary(m2)$adj.r.squared))  # R2 ajustado
+  cat(sprintf("%-20s %12.4f %12.4f\n", "AIC", AIC(m1), AIC(m2)))      # AIC
+  cat(sprintf("%-20s %12.4f %12.4f\n", "BIC", BIC(m1), BIC(m2)))      # BIC
+  cat(sprintf("%-20s %12.4f %12.4f\n", "HQ",  HQ(m1),  HQ(m2)))       # Hannan-Quinn
+
+  # Indica qué modelo es preferido según cada criterio
   cat(sprintf("  -> Adj. R2 prefers: %s\n",
               ifelse(summary(m2)$adj.r.squared > summary(m1)$adj.r.squared, "M2", "M1")))
-  cat(sprintf("  -> AIC     prefers: %s\n", ifelse(AIC(m2) < AIC(m1), "M2", "M1")))
-  cat(sprintf("  -> BIC     prefers: %s\n", ifelse(BIC(m2) < BIC(m1), "M2", "M1")))
-  cat(sprintf("  -> HQ      prefers: %s\n", ifelse(HQ(m2)  < HQ(m1),  "M2", "M1")))
+  cat(sprintf("  -> AIC     prefers: %s\n",
+              ifelse(AIC(m2) < AIC(m1), "M2", "M1")))  # Menor AIC es mejor
+  cat(sprintf("  -> BIC     prefers: %s\n",
+              ifelse(BIC(m2) < BIC(m1), "M2", "M1")))  # Menor BIC es mejor
+  cat(sprintf("  -> HQ      prefers: %s\n",
+              ifelse(HQ(m2)  < HQ(m1),  "M2", "M1")))  # Menor HQ es mejor
 }
 
-compute_criteria(modelo1_aapl, modelo2_aapl, "AAPL")
-compute_criteria(modelo1_msft, modelo2_msft, "MSFT")
-compute_criteria(modelo1_amzn, modelo2_amzn, "AMZN")
+# Aplicación de la función a cada activo
+compute_criteria(modelo1_aapl, modelo2_aapl, "AAPL")  # Comparación para AAPL
+compute_criteria(modelo1_msft, modelo2_msft, "MSFT")  # Comparación para MSFT
+compute_criteria(modelo1_amzn, modelo2_amzn, "AMZN")  # Comparación para AMZN
 
 # PARTE D: Suponga que volvemos al modelo original (Modelo 1):
 # (Ri − Rf) = α+β(Rm − Rf)+ϵ
@@ -328,60 +344,73 @@ compute_criteria(modelo1_amzn, modelo2_amzn, "AMZN")
 # en este Modelo 1. Dado el resultado de este test, ¿el Modelo 2 es razonable? Discuta.
 
 cat("\n\n")
-cat("PART D: Ramsey RESET Test\n")
+cat("PART D: Ramsey RESET Test\n")  # Título de la parte
 cat("\n\n")
 
 apply_reset <- function(modelo, name) {
-  cat(sprintf("\n RESET Test: %s \n", name))
-  r2  <- resettest(modelo, power = 2,   type = "fitted")
-  r3  <- resettest(modelo, power = 3,   type = "fitted")
-  r23 <- resettest(modelo, power = 2:3, type = "fitted")
+  cat(sprintf("\n RESET Test: %s \n", name))  # Imprime nombre del activo
+
+  # Aplicar test RESET con distintos poderes de los valores ajustados
+  r2  <- resettest(modelo, power = 2,   type = "fitted")   # Solo yhat^2
+  r3  <- resettest(modelo, power = 3,   type = "fitted")   # Solo yhat^3
+  r23 <- resettest(modelo, power = 2:3, type = "fitted")   # yhat^2 y yhat^3
+
+  # Mostrar resultados del test (estadístico F y p-value)
   cat(sprintf("  RESET (yhat^2 only):     F = %7.4f,  p-value = %.4f\n",
               r2$statistic,  r2$p.value))
   cat(sprintf("  RESET (yhat^3 only):     F = %7.4f,  p-value = %.4f\n",
               r3$statistic,  r3$p.value))
   cat(sprintf("  RESET (yhat^2 + yhat^3): F = %7.4f,  p-value = %.4f\n",
               r23$statistic, r23$p.value))
+
+  # Conclusión del test según nivel de significancia 5%
   cat(sprintf("  Conclusion: %s\n",
               ifelse(r23$p.value < 0.05,
-                     "REJECT H0: omitted nonlinearities in Model 1 (5%)",
-                     "FAIL TO REJECT H0: no evidence of nonlinearities (5%)")))
+                     "REJECT H0: omitted nonlinearities in Model 1 (5%)",  # Hay no linealidad
+                     "FAIL TO REJECT H0: no evidence of nonlinearities (5%)")))  # No hay evidencia
 }
 
+# Aplicar test a cada activo
 apply_reset(modelo1_aapl, "AAPL")
 apply_reset(modelo1_msft, "MSFT")
 apply_reset(modelo1_amzn, "AMZN")
 
-# Gráficos: Dispersión M1 vs M2
+# Cerrar gráficos abiertos
 graphics.off()
 
+# Función para graficar ajuste de modelo lineal (M1) vs cuadrático (M2)
 plot_fit <- function(data, asset, m1, m2, color1, color2) {
-  y_col   <- paste0(asset, "_ex")
-  df_plot <- data.frame(
-    x  = data$Mercado_ex,
-    y  = data[[y_col]],
-    m1 = fitted(m1),
-    m2 = fitted(m2)
-  ) %>% arrange(x)
 
+  y_col   <- paste0(asset, "_ex")  # Nombre de la variable dependiente
+  df_plot <- data.frame(
+    x  = data$Mercado_ex,   # Variable independiente (mercado)
+    y  = data[[y_col]],     # Variable dependiente (activo)
+    m1 = fitted(m1),        # Valores ajustados modelo 1
+    m2 = fitted(m2)         # Valores ajustados modelo 2
+  ) %>% arrange(x)          # Ordenar por x para líneas suaves
+
+  # Crear gráfico
   ggplot(df_plot, aes(x = x, y = y)) +
-    geom_point(alpha = 0.3, color = "gray50", size = 1) +
-    geom_line(aes(y = m1), color = color1, linewidth = 1, linetype = "solid") +
-    geom_line(aes(y = m2), color = color2, linewidth = 1, linetype = "dashed") +
+    geom_point(alpha = 0.3, color = "gray50", size = 1) +  # Datos reales
+    geom_line(aes(y = m1), color = color1, linewidth = 1, linetype = "solid") +   # Ajuste M1
+    geom_line(aes(y = m2), color = color2, linewidth = 1, linetype = "dashed") +  # Ajuste M2
     labs(
-      title   = sprintf("Fit M1 vs M2: %s", asset),
-      x       = "Market excess return",
-      y       = sprintf("%s excess return", asset),
-      caption = "Solid = M1 (linear)  |  Dashed = M2 (quadratic)"
-    ) + theme_minimal()
+      title   = sprintf("Fit M1 vs M2: %s", asset),  # Título del gráfico
+      x       = "Market excess return",              # Eje X
+      y       = sprintf("%s excess return", asset),  # Eje Y
+      caption = "Solid = M1 (linear)  |  Dashed = M2 (quadratic)"  # Leyenda
+    ) + theme_minimal()  # Estilo gráfico
 }
 
+# Guardar gráficos como imágenes
 ggsave("ajuste_AAPL.jpg",
        plot = plot_fit(df, "AAPL", modelo1_aapl, modelo2_aapl, "blue",      "darkblue"),
        width = 8, height = 5)
+
 ggsave("ajuste_MSFT.jpg",
        plot = plot_fit(df, "MSFT", modelo1_msft, modelo2_msft, "darkgreen", "olivedrab"),
        width = 8, height = 5)
+
 ggsave("ajuste_AMZN.jpg",
        plot = plot_fit(df, "AMZN", modelo1_amzn, modelo2_amzn, "purple",    "darkorchid"),
        width = 8, height = 5)
