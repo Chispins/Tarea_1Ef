@@ -190,3 +190,7 @@ test_hipotesis_beta <- function(modelo, nombre_activo) {
 test_hipotesis_beta(modelo_aapl, "Apple (AAPL)")
 test_hipotesis_beta(modelo_msft, "Microsoft (MSFT)")
 test_hipotesis_beta(modelo_amzn, "Amazon (AMZN)")
+
+# Tarea 2 - Econometría financiera (Pregunta 1)
+
+#
