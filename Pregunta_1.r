@@ -193,11 +193,31 @@ test_hipotesis_beta(modelo_amzn, "Amazon (AMZN)")
 
 # Tarea 2 - Econometría financiera (Pregunta 1)
 
-library(lmtest)   # resettest()
-library(AER)      # waldtest()
+library(lmtest)
+library(AER)
 
-# Preparar df para Tarea 2 (viene de series_excesos creado en Tarea 1)
-df <- as.data.frame(series_excesos)
+# Preparar df para Tarea 2, se recalculan los excesos con Rf = 2% constante
+# En lugar de usar series_excesos directamente (que usa IRX variable),
+# se parte desde df_retornos (creado en Tarea 1) y se reemplaza IRX por 0.02
+
+df_tarea2 <- df_retornos %>%
+  select(date, Activo, retorno) %>%
+  pivot_wider(names_from = Activo, values_from = retorno) %>%
+  drop_na() %>%
+  group_by(anio = year(date), semana = isoweek(date)) %>%
+  slice_max(date, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  mutate(
+    Rf_constante = 0.02,    # Tasa libre de riesgo fija al 2% anual
+    AAPL_ex = AAPL - Rf_constante,
+    MSFT_ex = MSFT - Rf_constante,
+    AMZN_ex = AMZN - Rf_constante,
+    Mercado_ex = Mercado - Rf_constante
+  ) %>%
+  select(date, AAPL_ex, MSFT_ex, AMZN_ex, Mercado_ex)
+
+# Se trabaja con este dataframe en lugar del df original
+df <- as.data.frame(df_tarea2)
 df$Mercado_ex2 <- df$Mercado_ex^2
 
 # PARTE A: Existen extensiones del modelo CAPM que introducen términos cuadráticos para capturar efectos no lineales
